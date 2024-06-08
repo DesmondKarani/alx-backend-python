@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+This module provides a function to safely retrieve values from a dictionary.
+It utilizes type annotations to specify the types of parameters and
+return values.
+"""
 
 
 from typing import TypeVar, Any, Mapping, Union
