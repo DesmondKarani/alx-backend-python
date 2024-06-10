@@ -6,17 +6,20 @@ Module containing the wait_n coroutine which spawns wait_random n times.
 
 import asyncio
 from typing import List
-from _import_('0-basic_async_syntax').wait_random
+from 0-basic_async_syntax import wait_random  # Updated import statement
 
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
     """
-    async routine called wait_n that takes in 2 int arguments n and max_delay.
-    Spawns wait_random n times, and returns a list of delays.
+    Spawns wait_random n times with specified max_delay & returns delays list.
+
+    Args:
+        n (int): Number of times to spawn wait_random.
+        max_delay (int): Maximum delay value for wait_random.
+
+    Returns:
+        List[float]: List of delay values in ascending order.
     """
 
-    delays = []
-    for _ in range(n):
-        delays.append(await wait_random(max_delay))
-
+    delays = await asyncio.gather(*(wait_random(max_delay) for _ in range(n)))
     return sorted(delays)
