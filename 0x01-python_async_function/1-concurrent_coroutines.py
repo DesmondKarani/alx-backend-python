@@ -6,7 +6,7 @@ Module containing the wait_n coroutine which spawns wait_random n times.
 
 import asyncio
 from typing import List
-wait_random = _import_ ('basic_async_syntax').wait_random
+from basic_async_syntax import wait_random
 
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
