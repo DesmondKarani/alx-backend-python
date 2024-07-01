@@ -2,8 +2,9 @@
 """first unit test for utils.access_nested_map"""
 
 import unittest
+from unittest.mock import patch, Mock
 from parameterized import parameterized
-from utils import access_nested_map
+from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -33,8 +34,7 @@ class TestGetJson(unittest.TestCase):
         ("http://holberton.io", {"payload": False}),
     ])
     def test_get_json(self, test_url, test_payload):
-        """Returns a Mock object with a json method that returns
-        test_payload"""
+        """Test get_json function."""
         with patch('utils.requests.get') as mock_get:
             mock_response = Mock()
             mock_response.json.return_value = test_payload
@@ -43,6 +43,30 @@ class TestGetJson(unittest.TestCase):
             result = get_json(test_url)
             mock_get.assert_called_once_with(test_url)
             self.assertEqual(result, test_payload)
+
+
+class TestMemoize(unittest.TestCase):
+    def test_memoize(self):
+        """Test memoize decorator."""
+        class TestClass:
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        patcher = patch.object(TestClass, 'a_method', return_value=42)
+        mock_method = patcher.start()
+        try:
+            obj = TestClass()
+            result1 = obj.a_property
+            result2 = obj.a_property
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+            mock_method.assert_called_once()
+        finally:
+            patcher.stop()
 
 
 if __name__ == "__main__":
